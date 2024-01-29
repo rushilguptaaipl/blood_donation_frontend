@@ -10,48 +10,37 @@ import Button from "@mui/material/Button";
 import swal from "sweetalert";
 import axios from "axios";
 import { useState } from "react";
-import "./donation.css";
+import "./emergency.css";
 
-const Donation = () => {
+const Emergency = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    city: "",
+    registerar_name: "",
+    patient_name: "",
     contact: "",
-    email: "",
+    city: "",
     gender: "",
     blood_group: "",
-    DOB: "",
-    disease: "",
+    email: "",
+    age: "",
+    hospital: "",
   });
 
   const handleChange = (e) => {
-    if (e?.$isDayjsObject) {
-      return setFormData({ ...formData, DOB: `${e.$y}-${e.$M}-${e.$D}` });
-    }
     const { name, value } = e.target;
-    if (name === "disease") {
-      if (value === "true") {
-        setFormData({ ...formData, disease: true });
-      } else {
-        setFormData({ ...formData, disease: false });
-      }
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   const handleSubmit = (e) => {
+
+    formData.contact = Number(formData.contact)
+    formData.age = Number(formData.age)
+    console.log(formData);
     e.preventDefault();
-    if (formData.disease === true) {
-      formData.disease = true;
-    } else {
-      formData.disease = false;
-    }
     axios
-      .post("http://3.27.149.171/createDonation", formData)
+      .post("http://3.27.149.171/createEmergency", formData)
       .then((response) => {
         swal({
           title: response.data.message,
@@ -66,38 +55,39 @@ const Donation = () => {
         console.log(error);
       });
     setFormData({
-      name: "",
-      city: "",
-      contact: "",
-      email: "",
-      gender: "",
-      blood_group: "",
-      DOB: "",
-      disease: "",
+        registerar_name: "",
+        patient_name: "",
+        contact: "",
+        city: "",
+        gender: "",
+        blood_group: "",
+        email: "",
+        age: "",
+        hospital: "",
     });
   };
 
   return (
     <>
-      <h2>Add Donar</h2>
+      <h2>Add Emergency</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          label="Name"
+          label="registerar_name"
           className="inputField"
           onChange={handleChange}
-          placeholder="Name"
-          name="name"
-          value={formData.name}
+          placeholder="registerar name"
+          name="registerar_name"
+          value={formData.registerar_name}
         />
         <input
           type="text"
-          label="City"
+          label="patient_name"
           className="inputField"
           onChange={handleChange}
-          placeholder="City"
-          name="city"
-          value={formData.city}
+          placeholder="patient name"
+          name="patient_name"
+          value={formData.patient_name}
         />
         <input
           type="text"
@@ -110,12 +100,39 @@ const Donation = () => {
         />
         <input
           type="text"
+          label="city"
+          className="inputField"
+          onChange={handleChange}
+          placeholder="city"
+          name="city"
+          value={formData.city}
+        />
+        <input
+          type="text"
           label="Email"
           className="inputField"
           onChange={handleChange}
           placeholder="Email"
           name="email"
           value={formData.email}
+        />
+         <input
+          type="text"
+          label="age"
+          className="inputField"
+          onChange={handleChange}
+          placeholder="age"
+          name="age"
+          value={formData.age}
+        />
+         <input
+          type="text"
+          label="hospital"
+          className="inputField"
+          onChange={handleChange}
+          placeholder="hospital"
+          name="hospital"
+          value={formData.hospital}
         />
 
         <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
@@ -160,48 +177,15 @@ const Donation = () => {
           <MenuItem value={"O-"}>O-</MenuItem>
         </Select>
 
-        <label>
-          Date of Birth:
-          <input
-            type="date"
-            name="DOB"
-            value={formData.DOB}
-            onChange={handleChange}
-            className="birthDate"
-          />
-        </label>
-
-        <FormLabel id="demo-radio-buttons-group-label">
-          Any Previous Disease?
-        </FormLabel>
-        <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
-          name="radio-buttons-group"
-        >
-          <FormControlLabel
-            name="disease"
-            value="true"
-            checked={formData.disease === true}
-            onChange={handleChange}
-            control={<Radio />}
-            label="yes"
-          />
-          <FormControlLabel
-            control={<Radio />}
-            label="no"
-            name="disease"
-            value="false"
-            checked={formData.disease === false}
-            onChange={handleChange}
-          />
-        </RadioGroup>
+       
 
         <Button variant="outlined" type="submit">
           Submit
         </Button>
+
       </form>
     </>
   );
 };
 
-export default Donation;
+export default Emergency;
