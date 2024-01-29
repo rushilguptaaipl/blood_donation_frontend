@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -11,11 +11,10 @@ import { TextField } from "@mui/material";
 import swal from "sweetalert";
 import axios from "axios";
 import { useState } from "react";
-import "./donation.css"
+import "./donation.css";
 
-const Donation = () =>{
-
-    const [formData , setFormData] = useState({
+const Donation = () => {
+  const [formData, setFormData] = useState({
     name: "",
     city: "",
     contact: "",
@@ -24,83 +23,116 @@ const Donation = () =>{
     blood_group: "",
     DOB: "",
     disease: "",
-    })
+  });
 
-    const handleChange = (e) => {
-        if (e?.$isDayjsObject) {
-          return setFormData({ ...formData, DOB: `${e.$y}-${e.$M}-${e.$D}` });
-        }
-        const { name, value } = e.target;
-        if (name === "disease") {
-          if (value === "true") {
-            setFormData({ ...formData, disease: true });
-          } else {
-            setFormData({ ...formData, disease: false });
-          }
-        } else {
-          setFormData({
-            ...formData,
-            [name]: value,
-          });
-        }
-      };
+  const handleChange = (e) => {
+    if (e?.$isDayjsObject) {
+      return setFormData({ ...formData, DOB: `${e.$y}-${e.$M}-${e.$D}` });
+    }
+    const { name, value } = e.target;
+    if (name === "disease") {
+      if (value === "true") {
+        setFormData({ ...formData, disease: true });
+      } else {
+        setFormData({ ...formData, disease: false });
+      }
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
+  };
 
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        if (formData.disease === true) {
-          formData.disease = true;
-        } else {
-          formData.disease = false;
-        }
-        axios
-          .post("http://3.27.149.171/", formData)
-          .then((response) => {
-            swal({
-              title: response.data.message,
-              icon: "success",
-            })
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (formData.disease === true) {
+      formData.disease = true;
+    } else {
+      formData.disease = false;
+    }
+    axios
+      .post("http://3.27.149.171/", formData)
+      .then((response) => {
+        swal({
+          title: response.data.message,
+          icon: "success",
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-
-    return (
-        <>
-         <h2>Add Donar</h2>
+  return (
+    <>
+      <h2>Add Donar</h2>
       <form onSubmit={handleSubmit}>
-        <TextField
+
+        <input
+          type="text"
+          label="Name"
+          className="inputField"
+          onChange={handleChange}
+          placeholder="Name"
+          name="name"
+        />
+        <input
+          type="text"
+          label="City"
+          className="inputField"
+          onChange={handleChange}
+          placeholder="City"
+          name="city"
+        />
+        <input
+          type="text"
+          label="Name"
+          className="inputField"
+          onChange={handleChange}
+          placeholder="Contact"
+          name="contact"
+        />
+        <input
+          type="text"
+          label="Name"
+          className="inputField"
+          onChange={handleChange}
+          placeholder="Email"
+          name="email"
+        />
+
+        {/* <TextField
           id="outlined-controlled"
           label="Name"
           value={formData.name}
           name="name"
           onChange={handleChange}
-        />
+        /> */}
 
-        <TextField
+        {/* <TextField
           id="outlined-controlled"
           label="City"
           value={formData.city}
           name="city"
           onChange={handleChange}
-        />
+        /> */}
 
-        <TextField
+        {/* <TextField
           id="outlined-controlled"
           name="contact"
           label="Contact"
           value={formData.contact}
           onChange={handleChange}
-        />
+        /> */}
 
-        <TextField
+        {/* <TextField
           id="outlined-controlled"
           label="Contact"
           name="email"
           value={formData.email}
           onChange={handleChange}
-        />
+        /> */}
 
         <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
         <RadioGroup
@@ -151,6 +183,7 @@ const Donation = () =>{
             name="DOB"
             value={formData.DOB}
             onChange={handleChange}
+            className="birthDate"
           />
         </label>
 
@@ -183,8 +216,8 @@ const Donation = () =>{
           Submit
         </Button>
       </form>
-        </>
-    )
-}
+    </>
+  );
+};
 
-export default Donation
+export default Donation;

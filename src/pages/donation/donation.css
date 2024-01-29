@@ -8,3 +8,20 @@ form {
     background-color: #f5f5f5;
     border-radius: 10px;
   }
+
+  .inputField{
+    padding: 16.5px 14px ;
+    background: none;
+    font-weight: 400;
+    font-size: 1rem;
+    letter-spacing: 0.00938em;
+    border: 0.10px solid black;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+
+  .birthDate{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+  }
