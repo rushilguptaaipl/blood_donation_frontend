@@ -177,9 +177,9 @@ const Emergency = () => {
           <MenuItem value={"O-"}>O-</MenuItem>
         </Select>
 
-       
+       {/* <button className="submit_btn"></button> */}
 
-        <Button variant="outlined" type="submit">
+        <Button variant="outlined" type="submit" className="submit_btn">
           Submit
         </Button>
 
