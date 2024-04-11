@@ -39,8 +39,8 @@ const Donation = () => {
       );
       if (userDob >= eighteenYearsAgo) {
         setFormData({ ...formData, DOB: "" });
-        swal({
-          title: "Age must be grater than 18 years",
+        return swal({
+          title: "Age must be greater than 18 years",
           icon: "error",
         });
       }
@@ -55,7 +55,7 @@ const Donation = () => {
       value = Number(value);
     }
 
-    setFormData({
+    return setFormData({
       ...formData,
       [name]: value,
     });
@@ -65,7 +65,7 @@ const Donation = () => {
     e.preventDefault();
 
     if (formData.contact.toString().trim().length !== 10) {
-      swal({
+      return swal({
         title: "Contact must have 10 letters",
         icon: "error",
       });
@@ -86,7 +86,7 @@ const Donation = () => {
         });
         console.log(error);
       });
-    setFormData(initialFormData);
+    return setFormData(initialFormData);
   };
 
   return (
