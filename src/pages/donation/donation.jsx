@@ -13,7 +13,7 @@ import { useState } from "react";
 import "./donation.css";
 
 const Donation = () => {
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     name: "",
     city: "",
     contact: "",
@@ -22,36 +22,57 @@ const Donation = () => {
     blood_group: "",
     DOB: "",
     disease: "",
-  });
+  };
 
-  const handleChange = (e) => {
-    if (e?.$isDayjsObject) {
-      return setFormData({ ...formData, DOB: `${e.$y}-${e.$M}-${e.$D}` });
-    }
-    const { name, value } = e.target;
-    if (name === "disease") {
-      if (value === "true") {
-        setFormData({ ...formData, disease: true });
-      } else {
-        setFormData({ ...formData, disease: false });
+  const [formData, setFormData] = useState(initialFormData);
+
+  const handleChange = async (e) => {
+    let { name, value } = e.target;
+
+    if (name === "DOB") {
+      const userDob = new Date(value);
+      const currentDate = new Date();
+      const eighteenYearsAgo = new Date(
+        currentDate.getFullYear() - 18,
+        currentDate.getMonth(),
+        currentDate.getDate()
+      );
+      if (userDob >= eighteenYearsAgo) {
+        setFormData({ ...formData, DOB: "" });
+        swal({
+          title: "Age must be grater than 18 years",
+          icon: "error",
+        });
       }
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
     }
+
+    if (name === "disease") {
+      if (value === "true") value = true;
+      else value = false;
+    }
+
+    if (name === "contact") {
+      value = Number(value);
+    }
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formData.disease === true) {
-      formData.disease = true;
-    } else {
-      formData.disease = false;
+
+    if (formData.contact.toString().trim().length !== 10) {
+      swal({
+        title: "Contact must have 10 letters",
+        icon: "error",
+      });
     }
+
     axios
-      .post("http://3.27.149.171/createDonation", formData)
+      .post("http://localhost:3000/createDonation", formData)
       .then((response) => {
         swal({
           title: response.data.message,
@@ -65,16 +86,7 @@ const Donation = () => {
         });
         console.log(error);
       });
-    setFormData({
-      name: "",
-      city: "",
-      contact: "",
-      email: "",
-      gender: "",
-      blood_group: "",
-      DOB: "",
-      disease: "",
-    });
+    setFormData(initialFormData);
   };
 
   return (
@@ -89,6 +101,7 @@ const Donation = () => {
           placeholder="Name"
           name="name"
           value={formData.name}
+          required
         />
         <input
           type="text"
@@ -100,13 +113,13 @@ const Donation = () => {
           value={formData.city}
         />
         <input
-          type="text"
+          type="number"
           label="Contact"
           className="inputField"
           onChange={handleChange}
           placeholder="Contact"
           name="contact"
-          value={formData.contact}
+          value={formData.contact || ""}
         />
         <input
           type="text"
@@ -124,19 +137,19 @@ const Donation = () => {
           name="radio-buttons-group"
         >
           <FormControlLabel
-            value="F"
+            value="FEMALE"
             name="gender"
             control={<Radio />}
             label="Female"
-            checked={formData.gender === "F"}
+            checked={formData.gender === "FEMALE"}
             onChange={handleChange}
           />
           <FormControlLabel
-            value="M"
+            value="MALE"
             name="gender"
             control={<Radio />}
             label="Male"
-            checked={formData.gender === "M"}
+            checked={formData.gender === "MALE"}
             onChange={handleChange}
           />
         </RadioGroup>
@@ -180,7 +193,7 @@ const Donation = () => {
         >
           <FormControlLabel
             name="disease"
-            value="true"
+            value={true}
             checked={formData.disease === true}
             onChange={handleChange}
             control={<Radio />}
@@ -190,7 +203,7 @@ const Donation = () => {
             control={<Radio />}
             label="no"
             name="disease"
-            value="false"
+            value={false}
             checked={formData.disease === false}
             onChange={handleChange}
           />
