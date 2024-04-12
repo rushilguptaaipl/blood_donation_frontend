@@ -11,9 +11,11 @@ import swal from "sweetalert";
 import axios from "axios";
 import { useState } from "react";
 import "./emergency.css";
+import Navbar from "../../components/navbar";
+import Footer from "../../components/footer"
 
 const Emergency = () => {
-  const [formData, setFormData] = useState({
+  const initialFormDate = {
     registerar_name: "",
     patient_name: "",
     contact: "",
@@ -23,24 +25,36 @@ const Emergency = () => {
     email: "",
     age: "",
     hospital: "",
-  });
+  };
 
+  const [formData, setFormData] = useState(initialFormDate);
+
+  // handle change in form
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
+    let { name, value } = e.target;
+
+    if (name === "age") value = Number(value);
+    if (name === "contact") value = Number(value);
+
+    return setFormData({
       ...formData,
       [name]: value,
     });
   };
 
+  // Handle the submit
   const handleSubmit = (e) => {
-
-    formData.contact = Number(formData.contact)
-    formData.age = Number(formData.age)
-    console.log(formData);
     e.preventDefault();
+
+    if (formData.contact.toString().trim().length !== 10) {
+      return swal({
+        title: "Contact must have 10 letters",
+        icon: "error",
+      });
+    }
+
     axios
-      .post("http://3.27.149.171/createEmergency", formData)
+      .post("http://localhost:3000/createEmergency", formData)
       .then((response) => {
         swal({
           title: response.data.message,
@@ -54,22 +68,12 @@ const Emergency = () => {
         });
         console.log(error);
       });
-    setFormData({
-        registerar_name: "",
-        patient_name: "",
-        contact: "",
-        city: "",
-        gender: "",
-        blood_group: "",
-        email: "",
-        age: "",
-        hospital: "",
-    });
+    return setFormData(initialFormDate);
   };
 
   return (
     <>
-      <h2>Add Emergency</h2>
+      <Navbar title = "SUBMIT EMERGENCY"/>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -116,7 +120,7 @@ const Emergency = () => {
           name="email"
           value={formData.email}
         />
-         <input
+        <input
           type="text"
           label="age"
           className="inputField"
@@ -125,7 +129,7 @@ const Emergency = () => {
           name="age"
           value={formData.age}
         />
-         <input
+        <input
           type="text"
           label="hospital"
           className="inputField"
@@ -141,19 +145,19 @@ const Emergency = () => {
           name="radio-buttons-group"
         >
           <FormControlLabel
-            value="F"
+            value="FEMALE"
             name="gender"
             control={<Radio />}
             label="Female"
-            checked={formData.gender === "F"}
+            checked={formData.gender === "FEMALE"}
             onChange={handleChange}
           />
           <FormControlLabel
-            value="M"
+            value="MALE"
             name="gender"
             control={<Radio />}
             label="Male"
-            checked={formData.gender === "M"}
+            checked={formData.gender === "MALE"}
             onChange={handleChange}
           />
         </RadioGroup>
@@ -177,13 +181,11 @@ const Emergency = () => {
           <MenuItem value={"O-"}>O-</MenuItem>
         </Select>
 
-       {/* <button className="submit_btn"></button> */}
-
         <Button variant="outlined" type="submit" className="submit_btn">
           Submit
         </Button>
-
       </form>
+      <Footer/>
     </>
   );
 };

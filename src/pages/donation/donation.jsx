@@ -11,6 +11,8 @@ import swal from "sweetalert";
 import axios from "axios";
 import { useState } from "react";
 import "./donation.css";
+import Navbar from "../../components/navbar";
+import Footer from "../../components/footer"
 
 const Donation = () => {
   const initialFormData = {
@@ -91,7 +93,7 @@ const Donation = () => {
 
   return (
     <>
-      <h2>Add Donar</h2>
+      <Navbar title = "SUBMIT YOUR DETAILS"/>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -113,7 +115,7 @@ const Donation = () => {
           value={formData.city}
         />
         <input
-          type="number"
+          type="text"
           label="Contact"
           className="inputField"
           onChange={handleChange}
@@ -213,6 +215,7 @@ const Donation = () => {
           Submit
         </Button>
       </form>
+      <Footer/>
     </>
   );
 };

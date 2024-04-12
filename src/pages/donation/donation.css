@@ -3,6 +3,8 @@ form {
     flex-direction: column;
     width: 700px;
     margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
     padding: 20px;
     border: 1px solid #ccc;
     background-color: #f5f5f5;
