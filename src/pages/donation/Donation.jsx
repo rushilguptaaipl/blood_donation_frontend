@@ -8,11 +8,12 @@ import Select from "@mui/material/Select";
 import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
 import swal from "sweetalert";
-import axios from "axios";
 import { useState } from "react";
 import "./donation.css";
 import Navbar from "../../components/navbar";
-import Footer from "../../components/footer"
+import Footer from "../../components/footer";
+import { get, post } from "../../utils/http.util";
+import { checkContactNumberLength, checkAge } from "../donation/donation";
 
 const Donation = () => {
   const initialFormData = {
@@ -32,19 +33,9 @@ const Donation = () => {
     let { name, value } = e.target;
 
     if (name === "DOB") {
-      const userDob = new Date(value);
-      const currentDate = new Date();
-      const eighteenYearsAgo = new Date(
-        currentDate.getFullYear() - 18,
-        currentDate.getMonth(),
-        currentDate.getDate()
-      );
-      if (userDob >= eighteenYearsAgo) {
-        setFormData({ ...formData, DOB: "" });
-        return swal({
-          title: "Age must be greater than 18 years",
-          icon: "error",
-        });
+      const response = await checkAge(value);
+      if (!response) {
+        return setFormData({ ...formData, DOB: "" });
       }
     }
 
@@ -63,38 +54,21 @@ const Donation = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (formData.contact.toString().trim().length !== 10) {
-      return swal({
-        title: "Contact must have 10 letters",
-        icon: "error",
-      });
-    }
-
-    axios
-      .post("http://localhost:3000/createDonation", formData)
-      .then((response) => {
-        swal({
-          title: response.data.message,
-          icon: "success",
-        });
-      })
-      .catch((error) => {
-        swal({
-          title: error.response.data.message,
-          icon: "error",
-        });
-        console.log(error);
-      });
+    await checkContactNumberLength(formData.contact);
+    const response = await post(formData, "createDonation");
     return setFormData(initialFormData);
   };
 
   return (
     <>
-      <Navbar title = "SUBMIT YOUR DETAILS"/>
-      <form onSubmit={handleSubmit}>
+      <Navbar title="SUBMIT YOUR DETAILS" />
+      <form style={{
+        boxShadow:"rgba(0, 0, 0, 0.35) 0px 5px 15px",
+        border:'none',
+        background:'#FFF'
+      }} onSubmit={handleSubmit}>
         <input
           type="text"
           label="Name"
@@ -215,7 +189,7 @@ const Donation = () => {
           Submit
         </Button>
       </form>
-      <Footer/>
+      <Footer />
     </>
   );
 };

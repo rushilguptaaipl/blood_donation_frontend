@@ -1,7 +1,14 @@
+.wrapper-home{
+  min-height: 89vh;
+  height: 100%;
+}
+
+
 .header {
-    background-color: #dc3545;
+    background-color: #f37a87;
     padding: 20px 0;
     text-align: center;
+    /* min-height: 100vh */
   }
   
   .title {
@@ -14,7 +21,7 @@
   }
   
   .section {
-    background-color: #fff;
+    /* background-color: #fff; */
     border-radius: 8px;
     padding: 20px;
     text-align: center;

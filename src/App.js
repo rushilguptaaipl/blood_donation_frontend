@@ -1,7 +1,7 @@
 import './App.css';
-import Donation from './pages/donation/donation';
+import Donation from './pages/donation/Donation';
 import {Routes , Route , BrowserRouter } from 'react-router-dom';
-import Emergency from './pages/emergency/emergency';
+import Emergency from './pages/emergency/Emergency';
 import Home from './pages/home/home'
 
 function App() {
