@@ -12,8 +12,10 @@ const Home = () => {
 
         <main class="main">
           <section class="section">
-            <h2 class="section-title">Welcome to Blood Donation Center</h2>
+            <h2 class="section-title">Welcome to Blood Donation Portal</h2>
             <p class="section-text">Donate blood and save lives!</p>
+            <p class="section-text">This website is created as a part of college Project and is created by Rushil Gupta.</p>
+            <p class="section-text">For souce code contact <a href="mailto:rushil.gupta3@gmail.com">rushil.gupta3@gmail.com</a></p>
             <div class="buttons">
               <Link to="/emergency" class="button">
                 Emergency
